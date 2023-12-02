@@ -1,0 +1,1 @@
+I fixed it by downgrading chromadb to the last version before 0.4.0 (pip install --upgrade chromadb==0.3.29). When using >=0.4.0, the migration of data works differently, but the code from this repo is based on old migration (<0.4.0).
