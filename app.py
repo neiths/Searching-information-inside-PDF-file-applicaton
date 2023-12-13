@@ -11,9 +11,11 @@ from langchain.chains import RetrievalQA
 from constants import CHROMA_SETTINGS
 
 #model and tokenizer loading
-checkpoint = "LaMini-T5-738M"
+device = torch.device('cpu')
+checkpoint = "LaMini-T5-61M"
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
-base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, device_map='auto',offload_folder="offload",offload_state_dict=True, torch_dtype=torch.float16)
+base_model = AutoModelForSeq2SeqLM.from_pretrained(checkpoint, device_map=device, torch_dtype=torch.float32)
+
 
 @st.cache_resource
 def llm_pipeline():
@@ -44,14 +46,7 @@ def process_answer(instruction):
     qa = qa_llm()
     generated_text = qa(instruction)
     answer = generated_text['result']
-    # metadata = generated_text['metadata']
-    # for text in generated_text:
-        
-    #     print(answer)
-
-    # wrapped_text = textwrap.fill(response, 100)
-    # return wrapped_text
-    return answer,generated_text
+    return answer, generated_text
 
 def main():
     st.title("Search Your PDF 🐦📄")
@@ -64,7 +59,6 @@ def main():
     question = st.text_area("Enter your Question")
     if st.button("Ask"):
         st.info("Your Question: " + question)
-
         st.info("Your Answer")
         answer, metadata = process_answer(question)
         st.write(answer)

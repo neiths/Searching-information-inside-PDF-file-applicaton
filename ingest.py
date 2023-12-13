@@ -13,8 +13,8 @@ def main():
     for root, dirs, files in os.walk("docs"):
         for file in files:
             if file.endswith(".pdf"):
-                print(file)
-                loader = PDFMinerLoader(os.path.join(root, file))
+                        print(file)
+                        loader = PDFMinerLoader(os.path.join(root, file))
     documents = loader.load()
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=50)
     texts = text_splitter.split_documents(documents)
